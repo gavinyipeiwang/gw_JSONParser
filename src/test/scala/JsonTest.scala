@@ -36,4 +36,33 @@ class JsonTest extends FunSuite {
   test("JObject(Map(\"k1\" -> JString(\"test\"), \"k2\" -> JArray(Seq(JNumber(123L), JBoolean(false))))) should be printed as {k1:\"test\",k2:[123,false]}") {
     assert(JObject(Map("k1" -> JString("test"), "k2" -> JArray(Seq(JNumber(123L), JBoolean(false))))).toString == "{k1:\"test\",k2:[123,false]}")
   }
+
+  test("InputReader(\"abc\") has next.") {
+    val inputReader = new InputReader("abc")
+    assert(inputReader.hasNext())
+  }
+  test("InputReader(\"\") or InputReader(null) does not have next.") {
+    val inputReader1 = new InputReader("")
+    val inputReader2 = new InputReader(null)
+    assert(!inputReader1.hasNext())
+    assert(!inputReader2.hasNext())
+  }
+  test("InputReader(\"abc\") nextChar() nextChar() is b") {
+    val inputReader = new InputReader("abc")
+    inputReader.nextChar()
+    val char = inputReader.nextChar()
+    assert(char == 'b')
+  }
+  test("InputReader(\"abc\") read to 'b' is ab") {
+    val inputReader = new InputReader("abc")
+    val str = inputReader.readTo('c')
+    assert(str == "ab")
+    assert(inputReader.nextChar() == 'c')
+  }
+  test("InputReader(\"abc\") read to 'e' should throw a ParsingException") {
+    val inputReader = new InputReader("abc")
+    intercept[ParsingException] {
+      inputReader.readTo('e')
+    }
+  }
 }
