@@ -37,16 +37,6 @@ class JsonTest extends FunSuite {
     assert(JObject(Map("k1" -> JString("test"), "k2" -> JArray(Seq(JNumber(123L), JBoolean(false))))).toString == "{k1:\"test\",k2:[123,false]}")
   }
 
-  test("InputReader(\"abc\") has next.") {
-    val inputReader = new InputReader("abc")
-    assert(inputReader.hasNext())
-  }
-  test("InputReader(\"\") or InputReader(null) does not have next.") {
-    val inputReader1 = new InputReader("")
-    val inputReader2 = new InputReader(null)
-    assert(!inputReader1.hasNext())
-    assert(!inputReader2.hasNext())
-  }
   test("InputReader(\"abc\") nextChar() nextChar() is b") {
     val inputReader = new InputReader("abc")
     inputReader.nextChar()
@@ -87,6 +77,11 @@ class JsonTest extends FunSuite {
   test("Parser({ \"k1\":\"test\",\"k2\":false}) readObject should return JObject(Map(\"k1\" -> JString(\"test\"), \"k2\" -> JBoolean(false)))") {
     val parser = new Parser("{\"k1\":\"test\",\"k2\":false}")
     assert(parser.readObject() == JObject(Map("k1" -> JString("test"), "k2" -> JBoolean(false))))
+  }
+
+  test("Parser([\"abc\",false]) readObject should return JArray(Seq(JString(\"abc\"),JBoolean(false))") {
+    val parser = new Parser("[\"abc\",false]")
+    assert(parser.readArray() == JArray(Seq(JString("abc"), JBoolean(false))))
   }
 
 }
